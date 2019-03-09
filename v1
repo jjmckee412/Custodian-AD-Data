@@ -1,0 +1,44 @@
+# Jonathan McKee, March 9, 2019
+# Description: Imports a .csv file named 'Custodians' from the location C:\PowerShell\Custodians.csv.  'Custodians' contains 
+# the EmployeeID Active Directory attribute of the desired custodians in column 'A' with 'A1' titled 'EmployeeID'.  
+# The names are then queried against Active Directory. 
+# The output is is directed to C:\PowerShell\CustodianData.csv and opened.
+# -------------------------------------------------------------------------------
+# Variable definitions
+
+$Custodians = Import-Csv 'C:\PowerShell\test\Custodians.csv'
+$Properties = 'SAMaccountname', 'EmployeeID', 'SID', 'EmailAddress', 'Department', 'Office', 'Title'
+
+$Userdata = @()
+
+# -------------------------------------------------------------------------------
+# Main code
+
+Foreach ($Custodian in $Custodians)
+    {   
+    $SingleUser = Get-ADUser -filter "EmployeeID -like '$($Custodian.EmployeeID)'" -Properties $Properties | select $Properties
+    $Userdata += $SingleUser
+    
+
+ #   Write-Host $Userdata
+
+$Row = [ordered] @{
+               SAMaccountname = $SingleUser.SAMaccountname
+               EmployeeID = $SingleUser.EmployeeID
+               EMailAddress = $SingleUser.EmailAddress
+               LitigationHoldEnabled = $LitHold.LitigationHoldEnabled
+               SID = $SingleUser.SID
+               Department = $SingleUser.Department
+               Office = $SingleUser.Office
+               Title = $SingleUser.Title
+                   }
+                   if ($SingleUser.EmployeeID) 
+                   {
+
+               $Userdata += New-Object PSobject -Property $Row
+           }
+}
+
+$Userdata | Export-Csv -Path C:\PowerShell\CustodianData.csv -NoTypeInformation
+
+C:\PowerShell\CustodianData.csv
