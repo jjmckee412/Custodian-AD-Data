@@ -6,7 +6,7 @@
 # -------------------------------------------------------------------------------
 # Variable definitions
 
-$Custodians = Import-Csv 'C:\PowerShell\test\Custodians.csv'
+$Custodians = Import-Csv 'C:\Cases\Custodians.csv'
 $Properties = 'SAMaccountname', 'EmployeeID', 'SID', 'EmailAddress', 'Department', 'Office', 'Title'
 
 $Userdata = @()
@@ -39,6 +39,6 @@ $Row = [ordered] @{
            }
 }
 
-$Userdata | Export-Csv -Path C:\PowerShell\CustodianData.csv -NoTypeInformation
+$Userdata | Export-Csv -Path C:\Cases\CustodianData.csv -NoTypeInformation
 
 C:\PowerShell\CustodianData.csv
